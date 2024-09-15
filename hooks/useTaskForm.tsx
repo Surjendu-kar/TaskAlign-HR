@@ -36,7 +36,7 @@ export const useTaskForm = (onClose?: () => void): UseTaskFormReturn => {
     });
 
     try {
-      const baseEndPoint = `http://localhost:3000/api/tasks`;
+      const baseEndPoint = `${process.env.NEXT_PUBLIC_BE_URL}/api/tasks`;
       const response = await fetch(baseEndPoint, {
         method: "POST",
         headers: {
