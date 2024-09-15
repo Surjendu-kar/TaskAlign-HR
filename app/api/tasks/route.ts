@@ -7,7 +7,7 @@ connectDB();
 
 export async function GET() {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().sort({ createdAt: -1 });
     return NextResponse.json(tasks);
   } catch (error) {
     return NextResponse.json(
