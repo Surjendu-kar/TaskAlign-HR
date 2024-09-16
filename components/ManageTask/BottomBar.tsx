@@ -54,14 +54,14 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 
 interface BottomBarProps {
   onClose: () => void;
-  handleAddTask: () => void;
+  handleSubmit: () => void;
   taskName: string;
   isEditing: boolean;
 }
 
 const BottomBar: React.FC<BottomBarProps> = ({
   onClose,
-  handleAddTask,
+  handleSubmit,
   taskName,
   isEditing,
 }) => {
@@ -82,7 +82,7 @@ const BottomBar: React.FC<BottomBarProps> = ({
         <CancelButton onClick={onClose}>Cancel</CancelButton>
         <AddTaskButton
           variant="contained"
-          onClick={handleAddTask}
+          onClick={handleSubmit}
           disabled={!taskName.trim()}
         >
           {isEditing ? "Save" : "Add task"}

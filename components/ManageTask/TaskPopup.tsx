@@ -29,7 +29,7 @@ function TaskPopup({
   setPriority,
   dueDate,
   setDueDate,
-  handleAddTask,
+  handleSubmit,
   resetForm,
   isEditing,
 }: TaskPopupProps): JSX.Element {
@@ -55,7 +55,7 @@ function TaskPopup({
       />
       <BottomBar
         onClose={handleClose}
-        handleAddTask={handleAddTask}
+        handleSubmit={handleSubmit}
         taskName={taskName}
         isEditing={isEditing}
       />

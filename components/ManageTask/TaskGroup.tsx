@@ -125,6 +125,7 @@ interface TaskGroupProps {
   isToday: boolean;
   hasOverdueTasks: boolean;
   deletingTasks: string[];
+  addingTasks: string[];
 }
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
@@ -135,6 +136,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   isToday,
   hasOverdueTasks,
   deletingTasks,
+  addingTasks,
 }) => {
   const isOverdue = title.toLowerCase() === "overdue";
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -184,6 +186,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
             <Collapse
               key={task.id}
               in={!deletingTasks.includes(task.id)}
+              appear={addingTasks.includes(task.id)}
               timeout={300}
               unmountOnExit
             >

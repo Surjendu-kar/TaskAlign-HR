@@ -9,6 +9,7 @@ interface TaskListProps {
   onDeleteTask: (taskId: string) => void;
   onEditTask: (task: Task) => void;
   deletingTasks: string[];
+  addingTasks: string[];
 }
 
 const TaskList: React.FC<TaskListProps> = ({
@@ -16,6 +17,7 @@ const TaskList: React.FC<TaskListProps> = ({
   onDeleteTask,
   onEditTask,
   deletingTasks,
+  addingTasks,
 }) => {
   const now = dayjs();
 
@@ -93,6 +95,7 @@ const TaskList: React.FC<TaskListProps> = ({
           isToday={false}
           hasOverdueTasks={hasOverdueTasks}
           deletingTasks={deletingTasks}
+          addingTasks={addingTasks}
         />
       )}
 
@@ -106,6 +109,7 @@ const TaskList: React.FC<TaskListProps> = ({
           isToday={dayjs(dateKey).isSame(now, "day")}
           hasOverdueTasks={hasOverdueTasks}
           deletingTasks={deletingTasks}
+          addingTasks={addingTasks}
         />
       ))}
     </Paper>

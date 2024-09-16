@@ -9,13 +9,17 @@ declare global {
     dueDate: Dayjs;
   }
 
-  interface UseTaskFormReturn extends Task {
+  interface UseTaskFormReturn {
+    taskName: string;
     setTaskName: React.Dispatch<React.SetStateAction<string>>;
+    description: string;
     setDescription: React.Dispatch<React.SetStateAction<string>>;
+    priority: number;
     setPriority: React.Dispatch<React.SetStateAction<number>>;
+    dueDate: Dayjs;
     setDueDate: React.Dispatch<React.SetStateAction<Dayjs>>;
     resetForm: () => void;
-    handleAddTask: () => void;
+    handleSubmit: () => void;
   }
 }
 

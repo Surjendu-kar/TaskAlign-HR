@@ -11,6 +11,7 @@ import AddTaskButton from "@/components/AddTask/AddTaskButton";
 import TaskPopup from "@/components/ManageTask/TaskPopup";
 import { useTaskForm } from "@/hooks/useTaskForm";
 import TaskList from "../ManageTask/TaskList";
+import { v4 as uuidv4 } from "uuid";
 
 const MainContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
@@ -40,43 +41,83 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [deletingTasks, setDeletingTasks] = useState<string[]>([]);
+  const [addingTasks, setAddingTasks] = useState<string[]>([]);
 
   useEffect(() => {
     setIsClient(true);
     setTasks(initialTasks);
   }, [initialTasks]);
 
-  const taskForm = useTaskForm(() => {
-    if (editingTask) {
-      setTasks(
-        tasks.map((task) =>
-          task.id === editingTask.id
-            ? {
-                ...task,
-                taskName: taskForm.taskName,
-                description: taskForm.description,
-                priority: taskForm.priority,
-                dueDate: taskForm.dueDate,
-              }
-            : task
-        )
-      );
-      setEditingTask(null);
-    } else {
-      setTasks([
-        {
-          id: taskForm.id,
-          taskName: taskForm.taskName,
-          description: taskForm.description,
-          priority: taskForm.priority,
-          dueDate: taskForm.dueDate,
+  // const taskForm = useTaskForm(() => {
+
+  //   if (editingTask) {
+  //     setTasks(
+  //       tasks.map((task) =>
+  //         task.id === editingTask.id
+  //           ? {
+  //               ...task,
+  //               taskName: taskForm.taskName,
+  //               description: taskForm.description,
+  //               priority: taskForm.priority,
+  //               dueDate: taskForm.dueDate,
+  //             }
+  //           : task
+  //       )
+  //     );
+  //     setEditingTask(null);
+  //   } else {
+  //     setTasks([
+  //       {
+  //         id: taskForm.id,
+  //         taskName: taskForm.taskName,
+  //         description: taskForm.description,
+  //         priority: taskForm.priority,
+  //         dueDate: taskForm.dueDate,
+  //       },
+  //       ...tasks,
+  //     ]);
+  //   }
+  //   setIsFormOpen(false);
+  // });
+  const handleAddTask = async (taskData: Omit<Task, "id">) => {
+    const newId = uuidv4();
+    const newTask = { id: newId, ...taskData };
+
+    try {
+      setAddingTasks((prev) => [...prev, newId]);
+
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        ...tasks,
-      ]);
+        body: JSON.stringify(newTask),
+      });
+
+      if (response.ok) {
+        setTasks((prevTasks) => [newTask, ...prevTasks]);
+        setSnackbarMessage("Task added successfully");
+        setSnackbarOpen(true);
+
+        setTimeout(() => {
+          setAddingTasks((prev) => prev.filter((id) => id !== newId));
+        }, 300);
+      } else {
+        throw new Error("Failed to add task");
+      }
+    } catch (error) {
+      console.error("Error adding task:", error);
+      setAddingTasks((prev) => prev.filter((id) => id !== newId));
+      setSnackbarMessage("Failed to add task");
+      setSnackbarOpen(true);
     }
+
     setIsFormOpen(false);
-  });
+  };
+
+  const taskForm = useTaskForm(handleAddTask);
 
   const handleDeleteTask = async (taskId: string) => {
     try {
@@ -94,6 +135,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
       setTimeout(() => {
         setTasks(tasks.filter((task) => task.id !== taskId));
         setDeletingTasks((prev) => prev.filter((id) => id !== taskId));
+        setSnackbarMessage("1 task completed");
         setSnackbarOpen(true);
       }, 300);
     } catch (error) {
@@ -138,6 +180,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         onDeleteTask={handleDeleteTask}
         onEditTask={handleEditTask}
         deletingTasks={deletingTasks}
+        addingTasks={addingTasks}
       />
 
       <AddTaskButtonContainer>
@@ -157,7 +200,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
-        message="1 task completed"
+        message={snackbarMessage}
       />
     </MainContainer>
   );
