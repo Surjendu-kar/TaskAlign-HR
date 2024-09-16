@@ -40,6 +40,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [deletingTasks, setDeletingTasks] = useState<string[]>([]);
 
   useEffect(() => {
     setIsClient(true);
@@ -79,6 +80,8 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
+      setDeletingTasks((prev) => [...prev, taskId]);
+
       const response = await fetch(`/api/tasks?id=${taskId}`, {
         method: "DELETE",
       });
@@ -87,10 +90,15 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to delete task");
       }
-      setTasks(tasks.filter((task) => task.id !== taskId));
-      setSnackbarOpen(true);
+
+      setTimeout(() => {
+        setTasks(tasks.filter((task) => task.id !== taskId));
+        setDeletingTasks((prev) => prev.filter((id) => id !== taskId));
+        setSnackbarOpen(true);
+      }, 300);
     } catch (error) {
       console.error("Error deleting task:", error);
+      setDeletingTasks((prev) => prev.filter((id) => id !== taskId));
     }
   };
 
@@ -129,6 +137,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         tasks={tasks}
         onDeleteTask={handleDeleteTask}
         onEditTask={handleEditTask}
+        deletingTasks={deletingTasks}
       />
 
       <AddTaskButtonContainer>

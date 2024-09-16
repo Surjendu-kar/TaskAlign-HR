@@ -47,8 +47,6 @@ export async function DELETE(request: NextRequest) {
     if (!deletedTask) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
-
-    console.log(`Successfully deleted task with ID: ${id}`);
     return NextResponse.json(
       { message: "Task deleted successfully", deletedTask },
       { status: 200 }

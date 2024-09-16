@@ -124,6 +124,7 @@ interface TaskGroupProps {
   onEditTask: (task: Task) => void;
   isToday: boolean;
   hasOverdueTasks: boolean;
+  deletingTasks: string[];
 }
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
@@ -133,6 +134,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   onEditTask,
   isToday,
   hasOverdueTasks,
+  deletingTasks,
 }) => {
   const isOverdue = title.toLowerCase() === "overdue";
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -179,8 +181,18 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       <Collapse in={!isCollapsed}>
         <List disablePadding>
           {tasks.map((task) => (
-            <React.Fragment key={task.id}>
-              <StyledListItem>
+            <Collapse
+              key={task.id}
+              in={!deletingTasks.includes(task.id)}
+              timeout={300}
+              unmountOnExit
+            >
+              <StyledListItem
+                sx={{
+                  opacity: deletingTasks.includes(task.id) ? 0 : 1,
+                  transition: "opacity 0.3s ease-out",
+                }}
+              >
                 <TaskContent>
                   <CircleIcon
                     priority={task.priority}
@@ -221,7 +233,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
                 </Box>
               </StyledListItem>
               <StyledDivider />
-            </React.Fragment>
+            </Collapse>
           ))}
         </List>
       </Collapse>

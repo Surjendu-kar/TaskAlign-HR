@@ -8,12 +8,14 @@ interface TaskListProps {
   tasks: Task[];
   onDeleteTask: (taskId: string) => void;
   onEditTask: (task: Task) => void;
+  deletingTasks: string[];
 }
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
   onDeleteTask,
   onEditTask,
+  deletingTasks,
 }) => {
   const now = dayjs();
 
@@ -23,9 +25,12 @@ const TaskList: React.FC<TaskListProps> = ({
     dueDate: dayjs(task.dueDate),
   }));
 
-  // Separate overdue tasks
-  const overdueTasks = tasksWithDayjs.filter((task) => task.dueDate.isBefore(now));
-  const upcomingTasks = tasksWithDayjs.filter((task) => !task.dueDate.isBefore(now));
+  const overdueTasks = tasksWithDayjs.filter((task) =>
+    task.dueDate.isBefore(now)
+  );
+  const upcomingTasks = tasksWithDayjs.filter(
+    (task) => !task.dueDate.isBefore(now)
+  );
 
   // Group upcoming tasks by date
   const groupedTasks = upcomingTasks.reduce((acc, task) => {
@@ -87,6 +92,7 @@ const TaskList: React.FC<TaskListProps> = ({
           onEditTask={onEditTask}
           isToday={false}
           hasOverdueTasks={hasOverdueTasks}
+          deletingTasks={deletingTasks}
         />
       )}
 
@@ -99,6 +105,7 @@ const TaskList: React.FC<TaskListProps> = ({
           onEditTask={onEditTask}
           isToday={dayjs(dateKey).isSame(now, "day")}
           hasOverdueTasks={hasOverdueTasks}
+          deletingTasks={deletingTasks}
         />
       ))}
     </Paper>
