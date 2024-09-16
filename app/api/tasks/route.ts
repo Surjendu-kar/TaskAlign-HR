@@ -28,3 +28,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Error creating task" }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      console.log("Task ID is missing in the request");
+      return NextResponse.json(
+        { error: "Task ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deletedTask = await Task.findOneAndDelete({ id: id });
+
+    if (!deletedTask) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    console.log(`Successfully deleted task with ID: ${id}`);
+    return NextResponse.json(
+      { message: "Task deleted successfully", deletedTask },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in DELETE handler:", error);
+    return NextResponse.json({ error: "Error deleting task" }, { status: 500 });
+  }
+}

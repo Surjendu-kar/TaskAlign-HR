@@ -1,6 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { styled, CircularProgress, Stack, Typography } from "@mui/material";
+import {
+  styled,
+  CircularProgress,
+  Stack,
+  Typography,
+  Snackbar,
+} from "@mui/material";
 import AddTaskButton from "@/components/AddTask/AddTaskButton";
 import TaskPopup from "@/components/ManageTask/TaskPopup";
 import { useTaskForm } from "@/hooks/useTaskForm";
@@ -33,6 +39,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -70,8 +77,21 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
     setIsFormOpen(false);
   });
 
-  const handleDeleteTask = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      const response = await fetch(`/api/tasks?id=${taskId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete task");
+      }
+      setTasks(tasks.filter((task) => task.id !== taskId));
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
   const handleEditTask = (task: Task) => {
@@ -82,6 +102,20 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
     taskForm.setDueDate(task.dueDate);
     setIsFormOpen(true);
   };
+
+  const handleSnackbarClose = (
+    _: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  if (!isClient) {
+    return <CircularProgress />;
+  }
 
   if (!isClient) {
     return <CircularProgress />;
@@ -108,6 +142,14 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
           />
         )}
       </AddTaskButtonContainer>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message="1 task completed"
+      />
     </MainContainer>
   );
 }
