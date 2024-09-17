@@ -29,6 +29,27 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function PUT(request: NextRequest) {
+  try {
+    const body: ITask = await request.json();
+    const { id, taskName, description, priority, dueDate } = body;
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { id: id },
+      { taskName, description, priority, dueDate },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedTask, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: "Error updating task" }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

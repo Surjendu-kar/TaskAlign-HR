@@ -54,6 +54,9 @@ const CloseButton = styled("a")(({ theme }) => ({
   marginRight: "3px",
   fontSize: "18px",
   cursor: "pointer",
+  padding: "5px",
+  borderRadius: "5px",
+
   "&:hover": {
     backgroundColor: "#ebe8e89e",
   },
@@ -102,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
           <AvatarStyle>N</AvatarStyle>
           <NameStyle variant="subtitle1">Rahul</NameStyle>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Link href={"/notifications"}>
             <Badge
               badgeContent={0}

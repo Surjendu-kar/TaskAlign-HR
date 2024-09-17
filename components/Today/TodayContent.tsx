@@ -50,74 +50,75 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
     setTasks(initialTasks);
   }, [initialTasks]);
 
-  // const taskForm = useTaskForm(() => {
+  const handleAddOrUpdateTask = async (taskData: Omit<Task, "id">) => {
+    if (editingTask) {
+      // Update existing task
+      try {
+        const updatedTask = { id: editingTask.id, ...taskData };
+        const response = await fetch(`/api/tasks`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedTask),
+        });
 
-  //   if (editingTask) {
-  //     setTasks(
-  //       tasks.map((task) =>
-  //         task.id === editingTask.id
-  //           ? {
-  //               ...task,
-  //               taskName: taskForm.taskName,
-  //               description: taskForm.description,
-  //               priority: taskForm.priority,
-  //               dueDate: taskForm.dueDate,
-  //             }
-  //           : task
-  //       )
-  //     );
-  //     setEditingTask(null);
-  //   } else {
-  //     setTasks([
-  //       {
-  //         id: taskForm.id,
-  //         taskName: taskForm.taskName,
-  //         description: taskForm.description,
-  //         priority: taskForm.priority,
-  //         dueDate: taskForm.dueDate,
-  //       },
-  //       ...tasks,
-  //     ]);
-  //   }
-  //   setIsFormOpen(false);
-  // });
-  const handleAddTask = async (taskData: Omit<Task, "id">) => {
-    const newId = uuidv4();
-    const newTask = { id: newId, ...taskData };
-
-    try {
-      setAddingTasks((prev) => [...prev, newId]);
-
-      const response = await fetch("/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
-
-      if (response.ok) {
-        setTasks((prevTasks) => [newTask, ...prevTasks]);
-        setSnackbarMessage("Task added successfully");
+        if (response.ok) {
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task.id === editingTask.id ? updatedTask : task
+            )
+          );
+          setSnackbarMessage("Task updated successfully");
+          setSnackbarOpen(true);
+        } else {
+          throw new Error("Failed to update task");
+        }
+      } catch (error) {
+        console.error("Error updating task:", error);
+        setSnackbarMessage("Failed to update task");
         setSnackbarOpen(true);
-
-        setTimeout(() => {
-          setAddingTasks((prev) => prev.filter((id) => id !== newId));
-        }, 300);
-      } else {
-        throw new Error("Failed to add task");
       }
-    } catch (error) {
-      console.error("Error adding task:", error);
-      setAddingTasks((prev) => prev.filter((id) => id !== newId));
-      setSnackbarMessage("Failed to add task");
-      setSnackbarOpen(true);
+    } else {
+      // Add new task
+      const newId = uuidv4();
+      const newTask = { id: newId, ...taskData };
+
+      try {
+        setAddingTasks((prev) => [...prev, newId]);
+
+        const response = await fetch("/api/tasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTask),
+        });
+
+        if (response.ok) {
+          setTasks((prevTasks) => [newTask, ...prevTasks]);
+          setSnackbarMessage("Task added successfully");
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setAddingTasks((prev) => prev.filter((id) => id !== newId));
+          }, 300);
+        } else {
+          throw new Error("Failed to add task");
+        }
+      } catch (error) {
+        console.error("Error adding task:", error);
+        setAddingTasks((prev) => prev.filter((id) => id !== newId));
+        setSnackbarMessage("Failed to add task");
+        setSnackbarOpen(true);
+      }
     }
 
     setIsFormOpen(false);
+    setEditingTask(null);
   };
 
-  const taskForm = useTaskForm(handleAddTask);
+  const taskForm = useTaskForm(handleAddOrUpdateTask);
 
   const handleDeleteTask = async (taskId: string) => {
     try {
