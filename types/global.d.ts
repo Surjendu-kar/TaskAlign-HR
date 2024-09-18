@@ -1,5 +1,3 @@
-import { Dayjs } from "dayjs";
-
 declare global {
   interface Task {
     id: string;
@@ -10,6 +8,7 @@ declare global {
   }
 
   interface UseTaskFormReturn {
+    tasks: Task[];
     taskName: string;
     setTaskName: React.Dispatch<React.SetStateAction<string>>;
     description: string;
@@ -18,8 +17,21 @@ declare global {
     setPriority: React.Dispatch<React.SetStateAction<number>>;
     dueDate: Dayjs;
     setDueDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+    editingTask: Task | null;
+    isFormOpen: boolean;
+    setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    snackbarOpen: boolean;
+    snackbarMessage: string;
+    deletingTasks: string[];
+    addingTasks: string[];
     resetForm: () => void;
-    handleSubmit: () => void;
+    handleAddOrUpdateTask: () => Promise<void>;
+    handleDeleteTask: (taskId: string) => Promise<void>;
+    handleEditTask: (task: Task) => void;
+    handleSnackbarClose: (
+      event: React.SyntheticEvent | Event,
+      reason?: string
+    ) => void;
   }
 }
 

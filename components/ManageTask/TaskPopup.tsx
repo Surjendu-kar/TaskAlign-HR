@@ -4,6 +4,7 @@ import { Paper } from "@mui/material";
 import TaskInput from "./TaskInput";
 import ActionBar from "./ActionBar";
 import BottomBar from "./BottomBar";
+import { Dayjs } from "dayjs";
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   width: "100%",
@@ -14,8 +15,18 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   border: "1px solid #e6e6e6",
 }));
 
-interface TaskPopupProps extends Omit<UseTaskFormReturn, "id"> {
+interface TaskPopupProps {
   onClose: () => void;
+  taskName: string;
+  setTaskName: React.Dispatch<React.SetStateAction<string>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  priority: number;
+  setPriority: React.Dispatch<React.SetStateAction<number>>;
+  dueDate: Dayjs;
+  setDueDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+  handleAddOrUpdateTask: () => Promise<void>;
+  resetForm: () => void;
   isEditing: boolean;
 }
 
@@ -29,7 +40,7 @@ function TaskPopup({
   setPriority,
   dueDate,
   setDueDate,
-  handleSubmit,
+  handleAddOrUpdateTask,
   resetForm,
   isEditing,
 }: TaskPopupProps): JSX.Element {
@@ -55,7 +66,7 @@ function TaskPopup({
       />
       <BottomBar
         onClose={handleClose}
-        handleSubmit={handleSubmit}
+        handleSubmit={handleAddOrUpdateTask}
         taskName={taskName}
         isEditing={isEditing}
       />
