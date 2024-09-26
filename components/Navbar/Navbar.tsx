@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-import { Stack, styled, Typography, Avatar, Box, Badge } from "@mui/material";
+import {
+  Stack,
+  styled,
+  Typography,
+  Avatar,
+  Box,
+  Badge,
+  Button,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import TaskModal from "./TaskModal";
 import NavItems from "./NavItems";
 import ProjectSection from "./ProjectSection";
 import Link from "next/link";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { signOut, useSession } from "next-auth/react";
 
 interface NavbarProps {
   isOpen: boolean;
@@ -85,12 +94,31 @@ const AddText = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { fontSize: "0.9rem" },
 }));
 
+const LogoutButton = styled(Button)(({ theme }) => ({
+  color: "#db4c3f",
+  backgroundColor: "transparent",
+  border: "none",
+  cursor: "pointer",
+  borderRadius: "5px",
+  transition: "0.2s",
+  "&:hover": {
+    backgroundColor: "#ffecea",
+  },
+}));
+
 const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [taskModalOpen, setTaskModalOpen] = useState(false);
+  const { data: session } = useSession();
 
   const toggleTaskModalOpen = () => setTaskModalOpen((prev) => !prev);
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push("/login");
+  };
+  
   return (
     <MainContainer isOpen={isOpen}>
       <TaskModal open={taskModalOpen} onClose={toggleTaskModalOpen} />
@@ -102,8 +130,12 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
         mt={1}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <AvatarStyle>N</AvatarStyle>
-          <NameStyle variant="subtitle1">Rahul</NameStyle>
+          <AvatarStyle>
+            {session?.user?.name ? session.user.name[0].toUpperCase() : "?"}
+          </AvatarStyle>
+          <NameStyle variant="subtitle1">
+            {session?.user?.name || "Guest"}
+          </NameStyle>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Link href={"/notifications"}>
@@ -134,13 +166,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
       </Stack>
 
       <Stack mt="auto">
-        {/* <NavItem href="/add-team">
-          <AddIcon fontSize="small" />
-          <NavText>Add team</NavText>
-        </NavItem>
-        <NavItem href="/templates">
-          <NavText>Browse templates</NavText>
-        </NavItem> */}
+        {session && <LogoutButton onClick={handleLogout}>Logout</LogoutButton>}
       </Stack>
     </MainContainer>
   );
