@@ -1,20 +1,9 @@
 import NextAuth, { NextAuthOptions, User as NextAuthUser } from "next-auth";
 import { Account } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import mongoose from "mongoose";
 import connectDB from "@/lib/db";
+import User from "@/lib/models/user.model";
 
-// Define User model
-const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  name: String,
-  image: String,
-  createdAt: { type: Date, default: Date.now },
-});
-
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
-
-// Extend the built-in User type
 interface ExtendedUser extends NextAuthUser {
   name?: string | null;
   image?: string | null;
@@ -36,10 +25,10 @@ export const authOptions: NextAuthOptions = {
       account: Account | null;
     }) {
       if (account?.provider === "google" && user.email) {
-        await connectDB(); // Ensure database connection
+        await connectDB();
 
         try {
-          // Check if user exists, if not create a new user
+          // Here I check if user exists, if not create a new user
           await User.findOneAndUpdate(
             { email: user.email },
             {
