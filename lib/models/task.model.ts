@@ -1,4 +1,3 @@
-import { ITask } from "@/types";
 import mongoose, { Schema, Document } from "mongoose";
 
 const taskSchema: Schema = new Schema(
@@ -27,4 +26,4 @@ const taskSchema: Schema = new Schema(
 );
 
 export const Task =
-  mongoose.models.Task || mongoose.model<ITask & Document>("Task", taskSchema);
+  mongoose.models.Task || mongoose.model<Task & Document>("Task", taskSchema);
