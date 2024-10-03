@@ -1,6 +1,5 @@
 import connectDB from "@/lib/db";
 import { Task } from "@/lib/models/task.model";
-import { ITask } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
 
 connectDB();
@@ -19,7 +18,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: ITask = await request.json();
+    const body: Task = await request.json();
     const { id, taskName, description, priority, dueDate } = body;
     const newTask = new Task({ id, taskName, description, priority, dueDate });
     const savedTask = await newTask.save();
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const body: ITask = await request.json();
+    const body: Task = await request.json();
     const { id, taskName, description, priority, dueDate } = body;
 
     const updatedTask = await Task.findOneAndUpdate(

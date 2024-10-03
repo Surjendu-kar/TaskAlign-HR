@@ -21,7 +21,7 @@ const MainContainer = styled(Box)({
 });
 
 const MainContent = styled(Stack, {
-  shouldForwardProp: (prop) => prop !== "isOpen",
+  shouldForwardProp: (prop) => prop !== "isOpen" && prop !== "isAuthenticated",
 })<MainContentProps>(({ isOpen, isAuthenticated }) => ({
   marginLeft: isOpen ? "280px" : "0",
   padding: isAuthenticated ? "20px" : 0,
