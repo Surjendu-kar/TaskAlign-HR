@@ -1,7 +1,15 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 import Lottie from "lottie-react";
 import animationData from "@/public/assets/development.json";
+
+const Text = styled(Typography)(({ theme }) => ({
+  marginTop: "-3rem",
+  color: "inherit",
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.8rem",
+  },
+}));
 
 function InDevelopment() {
   return (
@@ -24,9 +32,7 @@ function InDevelopment() {
           height: 300,
         }}
       />
-      <Typography sx={{ marginTop: "-3rem", color: "inherit" }}>
-        Currently in development phase
-      </Typography>
+      <Text>Currently in development phase</Text>
     </Box>
   );
 }

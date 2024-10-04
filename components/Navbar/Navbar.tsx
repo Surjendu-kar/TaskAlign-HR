@@ -8,6 +8,8 @@ import {
   Badge,
   Button,
   Drawer,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -32,6 +34,7 @@ const DrawerContent = styled(Stack)(({ theme }) => ({
   backgroundColor: "#fafafa",
   overflowY: "auto",
   gap: theme.spacing(1),
+  [theme.breakpoints.down("sm")]: { width: "100%" },
 }));
 
 const AvatarStyle = styled(Avatar)(({ theme }) => ({
@@ -99,6 +102,8 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const { data: session } = useSession();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const toggleTaskModalOpen = () => setTaskModalOpen((prev) => !prev);
 
@@ -134,6 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
           backgroundColor: "transparent",
           border: "none",
           boxShadow: isOpen ? "0 0 10px rgba(0,0,0,0.1)" : "none",
+          width: isSmallScreen ? "100%" : 280,
         },
       }}
     >

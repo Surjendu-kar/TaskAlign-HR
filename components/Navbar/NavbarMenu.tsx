@@ -1,6 +1,11 @@
 import React from "react";
-import { Menu, MenuItem as MuiMenuItem, ListItemIcon } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Menu,
+  MenuItem as MuiMenuItem,
+  ListItemIcon,
+  useMediaQuery,
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import AssessmentIcon from "@mui/icons-material/Assessment";
@@ -19,7 +24,7 @@ interface NavbarMenuProps {
   onLogout: () => void;
 }
 
-const MenuItem = styled(MuiMenuItem)(() => ({
+const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   fontSize: "13px",
   color: "inherit",
   borderRadius: "7px",
@@ -27,6 +32,7 @@ const MenuItem = styled(MuiMenuItem)(() => ({
   "&:hover": {
     backgroundColor: "#eeeeee8a",
   },
+  [theme.breakpoints.down("sm")]: { minHeight: "40px" },
 }));
 
 const NavbarMenu: React.FC<NavbarMenuProps> = ({
@@ -36,6 +42,8 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
   onLogout,
 }) => {
   const router = useRouter();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleNavigation = (path: string) => {
     onClose();
