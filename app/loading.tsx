@@ -12,7 +12,7 @@ function Loading() {
         justifyContent: "center",
       }}
     >
-      <LoadingAnimation animationData={loadingAnimation} />;
+      <LoadingAnimation animationData={loadingAnimation} />
     </Box>
   );
 }

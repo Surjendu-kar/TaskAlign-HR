@@ -3,7 +3,9 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { CircularProgress, Box } from "@mui/material";
+import { Box } from "@mui/material";
+import loadingAnimation from "@/public/assets/loadingV4.json";
+import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
 
 export default function Home() {
   const { status } = useSession();
@@ -18,11 +20,7 @@ export default function Home() {
   }, [status, router]);
 
   if (status === "loading" || status === "authenticated") {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingAnimation animationData={loadingAnimation} />;
   }
 
   return null;
