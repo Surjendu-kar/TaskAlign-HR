@@ -7,6 +7,7 @@ import {
   Box,
   Badge,
   Button,
+  Drawer,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,29 +22,14 @@ interface NavbarProps {
   isOpen: boolean;
   toggleNav: () => void;
 }
-interface MainContainerProps {
-  isOpen: boolean;
-}
 
-const MainContainer = styled(Stack, {
-  shouldForwardProp: (prop) => prop !== "isOpen",
-})<MainContainerProps>(({ theme, isOpen }) => ({
-  gap: theme.spacing(1),
+const DrawerContent = styled(Stack)(({ theme }) => ({
+  width: 280,
   height: "100%",
-  width: isOpen ? "280px" : "0",
-  position: "fixed",
-  zIndex: 1,
-  top: 0,
-  left: 0,
+  padding: theme.spacing(2),
   backgroundColor: "#fafafa",
-  overflowX: "hidden",
-  overflowY: isOpen ? "auto" : "hidden",
-  transition: "0.3s",
-  padding: isOpen ? theme.spacing(2) : 0,
-  boxShadow: isOpen ? "0 0 10px rgba(0,0,0,0.1)" : "none",
-  visibility: isOpen ? "visible" : "hidden",
-
-  [theme.breakpoints.down("sm")]: { width: isOpen ? "100%" : "0" },
+  overflowY: "auto",
+  gap: theme.spacing(1),
 }));
 
 const AvatarStyle = styled(Avatar)(({ theme }) => ({
@@ -65,7 +51,6 @@ const CloseButton = styled("a")(({ theme }) => ({
   cursor: "pointer",
   padding: "5px",
   borderRadius: "5px",
-
   "&:hover": {
     backgroundColor: "#ebe8e89e",
   },
@@ -94,7 +79,7 @@ const AddText = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { fontSize: "0.9rem" },
 }));
 
-const LogoutButton = styled(Button)(({ theme }) => ({
+const LogoutButton = styled(Button)(() => ({
   color: "#db4c3f",
   backgroundColor: "transparent",
   border: "none",
@@ -118,57 +103,81 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
     await signOut({ redirect: false });
     router.push("/login");
   };
-  
+
   return (
-    <MainContainer isOpen={isOpen}>
-      <TaskModal open={taskModalOpen} onClose={toggleTaskModalOpen} />
+    <Drawer
+      variant="persistent"
+      anchor="left"
+      open={isOpen}
+      onClose={toggleNav}
+      ModalProps={{
+        keepMounted: true,
+        disableScrollLock: true,
+        BackdropProps: {
+          invisible: true,
+        },
+      }}
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          backgroundColor: "transparent",
+          border: "none",
+          boxShadow: isOpen ? "0 0 10px rgba(0,0,0,0.1)" : "none",
+        },
+      }}
+    >
+      <DrawerContent>
+        <TaskModal open={taskModalOpen} onClose={toggleTaskModalOpen} />
 
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        mt={1}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <AvatarStyle>
-            {session?.user?.name ? session.user.name[0].toUpperCase() : "?"}
-          </AvatarStyle>
-          <NameStyle variant="subtitle1">
-            {session?.user?.name || "Guest"}
-          </NameStyle>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={1}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <AvatarStyle>
+              {session?.user?.name ? session.user.name[0].toUpperCase() : "?"}
+            </AvatarStyle>
+            <NameStyle variant="subtitle1">
+              {session?.user?.name || "Guest"}
+            </NameStyle>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Link href={"/notifications"}>
+              <Badge
+                badgeContent={0}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    color: "#db4c3f",
+                    backgroundColor: "#ffecea",
+                  },
+                }}
+              >
+                <NotificationsNoneIcon sx={{ color: "#db4c3f" }} />
+              </Badge>
+            </Link>
+            <CloseButton onClick={toggleNav}>&#9776;</CloseButton>
+          </Box>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Link href={"/notifications"}>
-            <Badge
-              badgeContent={0}
-              sx={{
-                "& .MuiBadge-badge": {
-                  color: "#db4c3f",
-                  backgroundColor: "#ffecea",
-                },
-              }}
-            >
-              <NotificationsNoneIcon sx={{ color: "#db4c3f" }} />
-            </Badge>
-          </Link>
-          {isOpen && <CloseButton onClick={toggleNav}>&#9776;</CloseButton>}
-        </Box>
-      </Box>
 
-      <AddTaskButton onClick={toggleTaskModalOpen}>
-        <AddIcon fontSize="small" />
-        <AddText>Add task</AddText>
-      </AddTaskButton>
+        <AddTaskButton onClick={toggleTaskModalOpen}>
+          <AddIcon fontSize="small" />
+          <AddText>Add task</AddText>
+        </AddTaskButton>
 
-      <Stack gap={2}>
-        <NavItems pathname={pathname} />
-        <ProjectSection />
-      </Stack>
+        <Stack gap={2}>
+          <NavItems pathname={pathname} />
+          <ProjectSection />
+        </Stack>
 
-      <Stack mt="auto">
-        {session && <LogoutButton onClick={handleLogout}>Logout</LogoutButton>}
-      </Stack>
-    </MainContainer>
+        <Stack mt="auto">
+          {session && (
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          )}
+        </Stack>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
