@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Box } from "@mui/material";
 import loadingAnimation from "@/public/assets/loadingV4.json";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
 

@@ -1,9 +1,9 @@
-import { TodayContent } from "@/components/Today/TodayContent";
 import { cookies } from "next/headers";
 import { headers } from "next/headers";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { TaskContent } from "@/components/TaskContent/TaskContent";
 
 async function getTasks() {
   const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
@@ -32,5 +32,5 @@ async function getTasks() {
 
 export default async function TodayPage() {
   const initialTasks = await getTasks();
-  return <TodayContent initialTasks={initialTasks} />;
+  return <TaskContent initialTasks={initialTasks} />;
 }

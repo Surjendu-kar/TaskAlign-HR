@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { styled, Stack, Typography, Snackbar } from "@mui/material";
+import { usePathname } from "next/navigation";
+import dayjs from "dayjs";
 import AddTaskButton from "@/components/AddTask/AddTaskButton";
 import TaskPopup from "@/components/ManageTask/TaskPopup";
 import { useTaskForm } from "@/hooks/useTaskForm";
-import TaskList from "../ManageTask/TaskList";
-import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import loadingAnimation from "@/public/assets/loading.json";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import TaskList from "../ManageTask/TaskList";
 import NoTaskAnimation from "../NoTaskAnimation/NoTaskAnimation";
 
 const MainContainer = styled(Stack)(({ theme }) => ({
@@ -28,12 +30,13 @@ const Heading = styled(Typography)({
   fontWeight: "bold",
 });
 
-interface TodayContentProps {
+interface TaskContentProps {
   initialTasks: Task[];
 }
 
-export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
+export function TaskContent({ initialTasks }: TaskContentProps): JSX.Element {
   const [isClient, setIsClient] = useState(false);
+  const pathname = usePathname();
 
   const {
     tasks,
@@ -67,12 +70,26 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
     return <LoadingAnimation animationData={loadingAnimation} />;
   }
 
+  const now = dayjs();
+  const isToday = pathname === "/today";
+
+  const filteredTasks = tasks.filter((task) => {
+    const taskDate = dayjs(task.dueDate);
+    if (isToday) {
+      return taskDate.isBefore(now, "day") || taskDate.isSame(now, "day");
+    } else {
+      return taskDate.isAfter(now, "day");
+    }
+  });
+
+  const headingText = isToday ? "Today" : "Inbox";
+
   return (
     <MainContainer>
-      <Heading>Today</Heading>
+      <Heading>{headingText}</Heading>
 
       <TaskList
-        tasks={tasks}
+        tasks={filteredTasks}
         onDeleteTask={handleDeleteTask}
         onEditTask={handleEditTask}
         deletingTasks={deletingTasks}
@@ -108,7 +125,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         message={snackbarMessage}
       />
 
-      {tasks.length === 0 && !isFormOpen && <NoTaskAnimation />}
+      {filteredTasks.length === 0 && !isFormOpen && <NoTaskAnimation />}
     </MainContainer>
   );
 }
