@@ -7,8 +7,7 @@ import { useTaskForm } from "@/hooks/useTaskForm";
 import TaskList from "../ManageTask/TaskList";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import loadingAnimation from "@/public/assets/loading.json";
-import noTaskAnimation from "@/public/assets/noTask.json";
-import Lottie from "lottie-react";
+import NoTaskAnimation from "../NoTaskAnimation/NoTaskAnimation";
 
 const MainContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
@@ -109,16 +108,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         message={snackbarMessage}
       />
 
-      {tasks.length === 0 && !isFormOpen && (
-        <Stack justifyContent="center" alignItems="center" height="60vh">
-          <Lottie
-            animationData={noTaskAnimation}
-            loop={true}
-            autoplay={true}
-            style={{ width: 400, height: 400 }}
-          />
-        </Stack>
-      )}
+      {tasks.length === 0 && !isFormOpen && <NoTaskAnimation />}
     </MainContainer>
   );
 }
