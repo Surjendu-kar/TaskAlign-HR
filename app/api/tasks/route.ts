@@ -1,11 +1,23 @@
 import connectDB from "@/lib/db";
-import { Task } from "@/lib/models/task.model";
+import { getUserTaskModel } from "@/lib/models/task.model";
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 connectDB();
 
-export async function GET() {
+async function getUserEmail(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user?.email) {
+    throw new Error("User not authenticated");
+  }
+  return session.user.email;
+}
+
+export async function GET(req: NextRequest) {
   try {
+    const userEmail = await getUserEmail(req);
+    const Task = getUserTaskModel(userEmail);
     const tasks = await Task.find().sort({ createdAt: -1 });
     return NextResponse.json(tasks);
   } catch (error) {
@@ -18,7 +30,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: Task = await request.json();
+    const userEmail = await getUserEmail(request);
+    const Task = getUserTaskModel(userEmail);
+    const body = await request.json();
     const { id, taskName, description, priority, dueDate } = body;
     const newTask = new Task({ id, taskName, description, priority, dueDate });
     const savedTask = await newTask.save();
@@ -30,7 +44,9 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const body: Task = await request.json();
+    const userEmail = await getUserEmail(request);
+    const Task = getUserTaskModel(userEmail);
+    const body = await request.json();
     const { id, taskName, description, priority, dueDate } = body;
 
     const updatedTask = await Task.findOneAndUpdate(
@@ -51,11 +67,12 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const userEmail = await getUserEmail(request);
+    const Task = getUserTaskModel(userEmail);
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
     if (!id) {
-      console.log("Task ID is missing in the request");
       return NextResponse.json(
         { error: "Task ID is required" },
         { status: 400 }

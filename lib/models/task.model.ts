@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 const taskSchema: Schema = new Schema(
   {
@@ -25,5 +25,15 @@ const taskSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const Task =
-  mongoose.models.Task || mongoose.model<Task & Document>("Task", taskSchema);
+export function getUserTaskModel(email: string): Model<Task> {
+  const localPart = email.split("@")[0];
+
+  const sanitizedEmail = localPart.replace(/[^a-zA-Z0-9]/g, "_");
+
+  const collectionName = `tasks_${sanitizedEmail}`;
+
+  return (
+    mongoose.models[collectionName] ||
+    mongoose.model<Task>(collectionName, taskSchema)
+  );
+}
