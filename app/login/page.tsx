@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Stack, Button, styled, CircularProgress } from "@mui/material";
+import { Stack, Button, styled } from "@mui/material";
+import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
+import loadingAnimation from "@/public/assets/loading.json";
 
 const GoogleButton = styled(Button)(({ theme }) => ({
   textTransform: "capitalize",
@@ -74,11 +76,7 @@ export default function LoginPage() {
   };
 
   if (status === "loading" || isSigningIn) {
-    return (
-      <Stack justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-      </Stack>
-    );
+    return <LoadingAnimation animationData={loadingAnimation} />;
   }
 
   return (

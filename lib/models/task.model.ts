@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
 
 const taskSchema: Schema = new Schema(
   {
@@ -27,9 +27,7 @@ const taskSchema: Schema = new Schema(
 
 export function getUserTaskModel(email: string): Model<Task> {
   const localPart = email.split("@")[0];
-
   const sanitizedEmail = localPart.replace(/[^a-zA-Z0-9]/g, "_");
-
   const collectionName = `tasks_${sanitizedEmail}`;
 
   return (

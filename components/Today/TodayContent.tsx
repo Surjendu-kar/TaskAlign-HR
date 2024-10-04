@@ -1,16 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  styled,
-  CircularProgress,
-  Stack,
-  Typography,
-  Snackbar,
-} from "@mui/material";
+import { styled, Stack, Typography, Snackbar } from "@mui/material";
 import AddTaskButton from "@/components/AddTask/AddTaskButton";
 import TaskPopup from "@/components/ManageTask/TaskPopup";
 import { useTaskForm } from "@/hooks/useTaskForm";
 import TaskList from "../ManageTask/TaskList";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import loadingAnimation from "@/public/assets/loading.json";
+import noTaskAnimation from "@/public/assets/noTask.json";
+import Lottie from "lottie-react";
 
 const MainContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
@@ -67,7 +65,7 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
   }, []);
 
   if (!isClient) {
-    return <CircularProgress />;
+    return <LoadingAnimation animationData={loadingAnimation} />;
   }
 
   return (
@@ -110,6 +108,17 @@ export function TodayContent({ initialTasks }: TodayContentProps): JSX.Element {
         onClose={handleSnackbarClose}
         message={snackbarMessage}
       />
+
+      {tasks.length === 0 && !isFormOpen && (
+        <Stack justifyContent="center" alignItems="center" height="60vh">
+          <Lottie
+            animationData={noTaskAnimation}
+            loop={true}
+            autoplay={true}
+            style={{ width: 400, height: 400 }}
+          />
+        </Stack>
+      )}
     </MainContainer>
   );
 }

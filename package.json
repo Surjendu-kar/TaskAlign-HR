@@ -16,11 +16,13 @@
     "@mui/material": "^6.0.0",
     "@mui/x-date-pickers": "^7.15.0",
     "dayjs": "^1.11.13",
+    "lottie-react": "^2.4.0",
     "mongoose": "^8.6.0",
     "next": "^14.2.7",
     "next-auth": "^4.24.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-lottie": "^1.2.4",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
