@@ -4,6 +4,8 @@ import { Box, Stack, styled, CircularProgress } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
+import loadingAnimation from "@/public/assets/loadingV4.json";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -81,11 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [status, router, pathname]);
 
   if (status === "loading") {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingAnimation animationData={loadingAnimation} />;
   }
 
   if (!session && pathname !== "/login") {

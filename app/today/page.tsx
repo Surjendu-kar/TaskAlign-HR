@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-import { CircularProgress } from "@mui/material";
 import { TodayContent } from "@/components/Today/TodayContent";
 import { cookies } from "next/headers";
 import { headers } from "next/headers";
@@ -34,9 +32,5 @@ async function getTasks() {
 
 export default async function TodayPage() {
   const initialTasks = await getTasks();
-  return (
-    <Suspense fallback={<CircularProgress />}>
-      <TodayContent initialTasks={initialTasks} />
-    </Suspense>
-  );
+  return <TodayContent initialTasks={initialTasks} />;
 }
