@@ -158,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
             />
           </UserBox>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Link href={"/notifications"}>
+            <Link href={"/in-development"}>
               <Badge
                 badgeContent={0}
                 sx={{

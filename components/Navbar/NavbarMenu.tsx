@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Menu,
-  MenuItem as MuiMenuItem,
-  ListItemIcon,
-  Typography,
-} from "@mui/material";
+import { Menu, MenuItem as MuiMenuItem, ListItemIcon } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,7 +10,7 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import StarIcon from "@mui/icons-material/Star";
 import SyncIcon from "@mui/icons-material/Sync";
 import LogoutIcon from "@mui/icons-material/Logout";
-import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import { useRouter } from "next/navigation";
 
 interface NavbarMenuProps {
   anchorEl: null | HTMLElement;
@@ -40,6 +35,13 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
   onClose,
   onLogout,
 }) => {
+  const router = useRouter();
+
+  const handleNavigation = (path: string) => {
+    onClose();
+    router.push(path);
+  };
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -72,49 +74,49 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
         autoFocusItem: false,
       }}
     >
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <SettingsIcon fontSize="small" />
         </ListItemIcon>
         Settings
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <AddIcon fontSize="small" />
         </ListItemIcon>
         Add a team
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <AssessmentIcon fontSize="small" />
         </ListItemIcon>
         Activity log
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <PrintIcon fontSize="small" />
         </ListItemIcon>
         Print
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <MenuBookIcon fontSize="small" />
         </ListItemIcon>
         Resources
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <CardGiftcardIcon fontSize="small" />
         </ListItemIcon>
         {"What's new"}
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <StarIcon fontSize="small" sx={{ color: "#FFC107" }} />
         </ListItemIcon>
         Upgrade to Pro
       </MenuItem>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => handleNavigation("/in-development")}>
         <ListItemIcon>
           <SyncIcon fontSize="small" />
         </ListItemIcon>

@@ -40,7 +40,7 @@ interface NavItemsProps {
 
 const NavItems: React.FC<NavItemsProps> = ({ pathname }) => (
   <Box>
-    <NavItem href="/search" active={pathname === "/search"}>
+    <NavItem href="/in-development" active={pathname === "/search"}>
       <SearchIcon fontSize="small" />
       <NavText>Search</NavText>
     </NavItem>
@@ -52,11 +52,11 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname }) => (
       <CalendarTodayIcon fontSize="small" />
       <NavText>Today</NavText>
     </NavItem>
-    <NavItem href="/upcoming" active={pathname === "/upcoming"}>
+    <NavItem href="/in-development" active={pathname === "/upcoming"}>
       <DateRangeIcon fontSize="small" />
       <NavText>Upcoming</NavText>
     </NavItem>
-    <NavItem href="/filters-labels" active={pathname === "/filters-labels"}>
+    <NavItem href="/in-development" active={pathname === "/filters-labels"}>
       <LabelIcon fontSize="small" />
       <NavText>Filters & Labels</NavText>
     </NavItem>
