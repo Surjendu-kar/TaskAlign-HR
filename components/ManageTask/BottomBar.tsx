@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Button, Chip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CalendarToday } from "@mui/icons-material";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import loadingAnimation from "@/public/assets/loadingV4.json";
 
 const LeftActions = styled("div")(({ theme }) => ({
   margin: "10px 0",
@@ -57,6 +59,7 @@ interface BottomBarProps {
   handleSubmit: () => void;
   taskName: string;
   isEditing: boolean;
+  isLoading: boolean;
 }
 
 const BottomBar: React.FC<BottomBarProps> = ({
@@ -64,6 +67,7 @@ const BottomBar: React.FC<BottomBarProps> = ({
   handleSubmit,
   taskName,
   isEditing,
+  isLoading,
 }) => {
   return (
     <Box
@@ -83,9 +87,15 @@ const BottomBar: React.FC<BottomBarProps> = ({
         <AddTaskButton
           variant="contained"
           onClick={handleSubmit}
-          disabled={!taskName.trim()}
+          disabled={!taskName.trim() || isLoading}
         >
-          {isEditing ? "Save" : "Add task"}
+          {isLoading ? (
+            <LoadingAnimation animationData={loadingAnimation} />
+          ) : isEditing ? (
+            "Save"
+          ) : (
+            "Add task"
+          )}
         </AddTaskButton>
       </RightActions>
     </Box>

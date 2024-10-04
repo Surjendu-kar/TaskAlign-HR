@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import TaskInput from "./TaskInput";
@@ -44,9 +45,23 @@ function TaskPopup({
   resetForm,
   isEditing,
 }: TaskPopupProps): JSX.Element {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleClose = () => {
     resetForm();
     onClose();
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await handleAddOrUpdateTask();
+      handleClose();
+    } catch (error) {
+      console.error("Error submitting task:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,9 +81,10 @@ function TaskPopup({
       />
       <BottomBar
         onClose={handleClose}
-        handleSubmit={handleAddOrUpdateTask}
+        handleSubmit={handleSubmit}
         taskName={taskName}
         isEditing={isEditing}
+        isLoading={isLoading}
       />
     </FormContainer>
   );
