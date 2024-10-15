@@ -24,7 +24,7 @@ const MainContainer = styled(Box)({
 
 const MainContent = styled(Stack, {
   shouldForwardProp: (prop) => prop !== "isOpen" && prop !== "isAuthenticated",
-})<MainContentProps>(({ isOpen, isAuthenticated }) => ({
+})<MainContentProps>(({ isOpen, isAuthenticated, theme }) => ({
   marginLeft: isOpen ? "280px" : "0",
   padding: isAuthenticated ? "16px" : 0,
   height: isAuthenticated ? "auto" : "100vh",
@@ -32,6 +32,10 @@ const MainContent = styled(Stack, {
   width: "100%",
   alignItems: "center",
   justifyContent: "center",
+
+  [theme.breakpoints.down("sm")]: {
+    marginLeft: 0,
+  },
 }));
 
 const ContentWrapper = styled(Stack, {
