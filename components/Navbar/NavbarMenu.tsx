@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  Menu,
-  MenuItem as MuiMenuItem,
-  ListItemIcon,
-  useMediaQuery,
-} from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
+import { Menu, MenuItem as MuiMenuItem, ListItemIcon } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import AssessmentIcon from "@mui/icons-material/Assessment";
@@ -42,8 +37,6 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
   onLogout,
 }) => {
   const router = useRouter();
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleNavigation = (path: string) => {
     onClose();
@@ -69,7 +62,6 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
           minWidth: "280px",
           boxShadow: "0 0 8px rgba(0, 0, 0, .12)",
           borderRadius: "10px",
-          // minHeight: "400px",
           padding: "6px",
           marginTop: "0.5rem",
         },

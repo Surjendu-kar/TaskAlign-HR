@@ -22,11 +22,6 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { signOut, useSession } from "next-auth/react";
 import NavbarMenu from "./NavbarMenu";
 
-interface NavbarProps {
-  isOpen: boolean;
-  toggleNav: () => void;
-}
-
 const DrawerContent = styled(Stack)(({ theme }) => ({
   width: 280,
   height: "100%",
@@ -95,6 +90,11 @@ const UserBox = styled(Box)(({ theme }) => ({
     backgroundColor: "#f2efed",
   },
 }));
+
+interface NavbarProps {
+  isOpen: boolean;
+  toggleNav: () => void;
+}
 
 const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
   const pathname = usePathname();
@@ -194,7 +194,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
         </AddTaskButton>
 
         <Stack gap={2}>
-          <NavItems pathname={pathname} />
+          <NavItems pathname={pathname} isOpen={isOpen} toggleNav={toggleNav} />
           <ProjectSection />
         </Stack>
       </DrawerContent>

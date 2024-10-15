@@ -1,5 +1,11 @@
 import React from "react";
-import { Box, styled, Typography } from "@mui/material";
+import {
+  Box,
+  styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import InboxIcon from "@mui/icons-material/Inbox";
@@ -36,31 +42,64 @@ const NavText = styled(Typography)(({ theme }) => ({
 
 interface NavItemsProps {
   pathname: string;
+  isOpen: boolean;
+  toggleNav: () => void;
 }
 
-const NavItems: React.FC<NavItemsProps> = ({ pathname }) => (
-  <Box>
-    <NavItem href="/in-development" active={pathname === "/search"}>
-      <SearchIcon fontSize="small" />
-      <NavText>Search</NavText>
-    </NavItem>
-    <NavItem href="/inbox" active={pathname === "/inbox"}>
-      <InboxIcon fontSize="small" />
-      <NavText>Inbox</NavText>
-    </NavItem>
-    <NavItem href="/today" active={pathname === "/today"}>
-      <CalendarTodayIcon fontSize="small" />
-      <NavText>Today</NavText>
-    </NavItem>
-    <NavItem href="/in-development" active={pathname === "/upcoming"}>
-      <DateRangeIcon fontSize="small" />
-      <NavText>Upcoming</NavText>
-    </NavItem>
-    <NavItem href="/in-development" active={pathname === "/filters-labels"}>
-      <LabelIcon fontSize="small" />
-      <NavText>Filters & Labels</NavText>
-    </NavItem>
-  </Box>
-);
+const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const handleClick = () => {
+    if (isSmallScreen) {
+      toggleNav();
+    }
+  };
+
+  return (
+    <Box>
+      <NavItem
+        href="/in-development"
+        active={pathname === "/search"}
+        onClick={handleClick}
+      >
+        <SearchIcon fontSize="small" />
+        <NavText>Search</NavText>
+      </NavItem>
+      <NavItem
+        href="/inbox"
+        active={pathname === "/inbox"}
+        onClick={handleClick}
+      >
+        <InboxIcon fontSize="small" />
+        <NavText>Inbox</NavText>
+      </NavItem>
+      <NavItem
+        href="/today"
+        active={pathname === "/today"}
+        onClick={handleClick}
+      >
+        <CalendarTodayIcon fontSize="small" />
+        <NavText>Today</NavText>
+      </NavItem>
+      <NavItem
+        href="/in-development"
+        active={pathname === "/upcoming"}
+        onClick={handleClick}
+      >
+        <DateRangeIcon fontSize="small" />
+        <NavText>Upcoming</NavText>
+      </NavItem>
+      <NavItem
+        href="/in-development"
+        active={pathname === "/filters-labels"}
+        onClick={handleClick}
+      >
+        <LabelIcon fontSize="small" />
+        <NavText>Filters & Labels</NavText>
+      </NavItem>
+    </Box>
+  );
+};
 
 export default NavItems;
