@@ -26,7 +26,7 @@ const MainContent = styled(Stack, {
   shouldForwardProp: (prop) => prop !== "isOpen" && prop !== "isAuthenticated",
 })<MainContentProps>(({ isOpen, isAuthenticated }) => ({
   marginLeft: isOpen ? "280px" : "0",
-  padding: isAuthenticated ? "20px" : 0,
+  padding: isAuthenticated ? "16px" : 0,
   height: isAuthenticated ? "auto" : "100vh",
   transition: "margin-left 0.3s",
   width: "100%",
