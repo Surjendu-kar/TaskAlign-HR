@@ -11,7 +11,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { usePathname, useRouter } from "next/navigation";
 import TaskModal from "./TaskModal";
@@ -57,27 +57,27 @@ const CloseButton = styled("a")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { fontSize: "20px" },
 }));
 
-const AddTaskButton = styled("button")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(1),
-  padding: theme.spacing(1, 1, 1, 0.5),
-  fontSize: "14px",
-  color: "#db4c3f",
-  backgroundColor: "transparent",
-  border: "none",
-  cursor: "pointer",
-  borderRadius: "5px",
-  transition: "0.2s",
-  "&:hover": {
-    backgroundColor: "#ffecea",
-  },
-}));
+// const AddTaskButton = styled("button")(({ theme }) => ({
+//   display: "flex",
+//   alignItems: "center",
+//   gap: theme.spacing(1),
+//   padding: theme.spacing(1, 1, 1, 0.5),
+//   fontSize: "14px",
+//   color: "#db4c3f",
+//   backgroundColor: "transparent",
+//   border: "none",
+//   cursor: "pointer",
+//   borderRadius: "5px",
+//   transition: "0.2s",
+//   "&:hover": {
+//     backgroundColor: "#ffecea",
+//   },
+// }));
 
-const AddText = styled(Typography)(({ theme }) => ({
-  fontSize: "0.85rem",
-  [theme.breakpoints.down("sm")]: { fontSize: "0.9rem" },
-}));
+// const AddText = styled(Typography)(({ theme }) => ({
+//   fontSize: "0.85rem",
+//   [theme.breakpoints.down("sm")]: { fontSize: "0.9rem" },
+// }));
 
 const UserBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -188,10 +188,10 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
           onLogout={handleLogout}
         />
 
-        <AddTaskButton onClick={toggleTaskModalOpen}>
+        {/* <AddTaskButton onClick={toggleTaskModalOpen}>
           <AddIcon fontSize="small" />
           <AddText>Add task</AddText>
-        </AddTaskButton>
+        </AddTaskButton> */}
 
         <Stack gap={2}>
           <NavItems pathname={pathname} isOpen={isOpen} toggleNav={toggleNav} />
