@@ -120,6 +120,12 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
     setAnchorEl(null);
   };
 
+  const handleDrawer = () => {
+    if (isSmallScreen) {
+      toggleNav();
+    }
+  };
+
   return (
     <Drawer
       variant="persistent"
@@ -164,7 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
             />
           </UserBox>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Link href={"/in-development"}>
+            <Link href={"/in-development"} onClick={handleDrawer}>
               <Badge
                 badgeContent={0}
                 sx={{
@@ -186,6 +192,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
           onLogout={handleLogout}
+          handleDrawer={handleDrawer}
         />
 
         {/* <AddTaskButton onClick={toggleTaskModalOpen}>
@@ -194,7 +201,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
         </AddTaskButton> */}
 
         <Stack gap={2}>
-          <NavItems pathname={pathname} isOpen={isOpen} toggleNav={toggleNav} />
+          <NavItems pathname={pathname} toggleNav={toggleNav} />
           <ProjectSection />
         </Stack>
       </DrawerContent>

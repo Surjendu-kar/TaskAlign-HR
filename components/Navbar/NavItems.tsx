@@ -42,15 +42,14 @@ const NavText = styled(Typography)(({ theme }) => ({
 
 interface NavItemsProps {
   pathname: string;
-  isOpen: boolean;
   toggleNav: () => void;
 }
 
-const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
+const NavItems: React.FC<NavItemsProps> = ({ pathname, toggleNav }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleClick = () => {
+  const handleDrawer = () => {
     if (isSmallScreen) {
       toggleNav();
     }
@@ -61,7 +60,7 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
       <NavItem
         href="/in-development"
         active={pathname === "/search"}
-        onClick={handleClick}
+        onClick={handleDrawer}
       >
         <SearchIcon fontSize="small" />
         <NavText>Search</NavText>
@@ -69,7 +68,7 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
       <NavItem
         href="/inbox"
         active={pathname === "/inbox"}
-        onClick={handleClick}
+        onClick={handleDrawer}
       >
         <InboxIcon fontSize="small" />
         <NavText>Inbox</NavText>
@@ -77,7 +76,7 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
       <NavItem
         href="/today"
         active={pathname === "/today"}
-        onClick={handleClick}
+        onClick={handleDrawer}
       >
         <CalendarTodayIcon fontSize="small" />
         <NavText>Today</NavText>
@@ -85,7 +84,7 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
       <NavItem
         href="/in-development"
         active={pathname === "/upcoming"}
-        onClick={handleClick}
+        onClick={handleDrawer}
       >
         <DateRangeIcon fontSize="small" />
         <NavText>Upcoming</NavText>
@@ -93,7 +92,7 @@ const NavItems: React.FC<NavItemsProps> = ({ pathname, isOpen, toggleNav }) => {
       <NavItem
         href="/in-development"
         active={pathname === "/filters-labels"}
-        onClick={handleClick}
+        onClick={handleDrawer}
       >
         <LabelIcon fontSize="small" />
         <NavText>Filters & Labels</NavText>

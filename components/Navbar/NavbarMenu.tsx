@@ -17,6 +17,7 @@ interface NavbarMenuProps {
   open: boolean;
   onClose: () => void;
   onLogout: () => void;
+  handleDrawer: () => void;
 }
 
 const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
@@ -35,11 +36,13 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({
   open,
   onClose,
   onLogout,
+  handleDrawer,
 }) => {
   const router = useRouter();
 
   const handleNavigation = (path: string) => {
     onClose();
+    handleDrawer();
     router.push(path);
   };
 
