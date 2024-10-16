@@ -16,7 +16,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { usePathname, useRouter } from "next/navigation";
 import TaskModal from "./TaskModal";
 import NavItems from "./NavItems";
-import ProjectSection from "./ProjectSection";
+// import ProjectSection from "./ProjectSection";
 import Link from "next/link";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { signOut, useSession } from "next-auth/react";
@@ -202,7 +202,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNav }) => {
 
         <Stack gap={2}>
           <NavItems pathname={pathname} toggleNav={toggleNav} />
-          <ProjectSection />
+          {/* <ProjectSection /> */}
         </Stack>
       </DrawerContent>
     </Drawer>
