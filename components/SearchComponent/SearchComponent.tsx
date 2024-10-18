@@ -17,7 +17,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 const SearchDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
-    padding: "0px 5px ",
+    // padding: "0px 5px ",
     width: "100%",
     maxWidth: "600px",
     margin: 0,
