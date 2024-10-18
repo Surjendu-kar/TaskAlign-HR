@@ -19,9 +19,9 @@ const SearchDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
     padding: "0px 5px ",
     width: "100%",
-    maxWidth: "700px",
+    maxWidth: "600px",
     margin: 0,
-    top: "5%",
+    top: "2%",
     position: "absolute",
     boxShadow: "none",
   },
@@ -39,6 +39,10 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   padding: "5px 10px",
   cursor: "pointer",
   gap: theme.spacing(0.5),
+  transition: "0.4s",
+  "&:hover": {
+    backgroundColor: "#ebe8e89e",
+  },
 }));
 
 const TaskTitle = styled(Typography)({
