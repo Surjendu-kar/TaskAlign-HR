@@ -3,6 +3,8 @@ import { getUserTaskModel } from "@/lib/models/task.model";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import dayjs from "dayjs";
+import { cancelTaskReminders, scheduleTaskReminders } from "@/lib/email-service/email-service";
 
 connectDB();
 
@@ -34,10 +36,24 @@ export async function POST(request: NextRequest) {
     const Task = getUserTaskModel(userEmail);
     const body = await request.json();
     const { id, taskName, description, priority, dueDate } = body;
+
     const newTask = new Task({ id, taskName, description, priority, dueDate });
     const savedTask = await newTask.save();
+
+    await scheduleTaskReminders(
+      {
+        id: savedTask.id,
+        taskName: savedTask.taskName,
+        description: savedTask.description,
+        priority: savedTask.priority,
+        dueDate: dayjs(savedTask.dueDate),
+      },
+      userEmail
+    );
+
     return NextResponse.json(savedTask, { status: 201 });
   } catch (error) {
+    console.error("Error in POST handler:", error);
     return NextResponse.json({ error: "Error creating task" }, { status: 500 });
   }
 }
@@ -79,11 +95,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const deletedTask = await Task.findOneAndDelete({ id: id });
+    cancelTaskReminders(id);
 
+    const deletedTask = await Task.findOneAndDelete({ id: id });
     if (!deletedTask) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
+
     return NextResponse.json(
       { message: "Task deleted successfully", deletedTask },
       { status: 200 }
